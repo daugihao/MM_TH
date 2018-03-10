@@ -3,7 +3,7 @@
 // variable declarations and initialisations
 const float pi = 3.14159;
 
-float timestep = 1; // microseconds
+float timestep = 1; // milliseconds
 
 float rangeDAC = 4095;
 int settingDAC =0;
