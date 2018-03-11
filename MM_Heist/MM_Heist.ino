@@ -22,9 +22,6 @@ float maxFreqSine = 500.0;
 
 float timeSecs = 0.0;
 float timeLimitSecs = 30.0;
-float tempDegrees = 0.0;
-float minTemp = 18.0;
-float maxTemp = 25.0;
 
 bool buttonState = 0;
 
@@ -42,7 +39,6 @@ void setup() {
   attachInterrupt(52, heistReset, FALLING);
   attachInterrupt(53, heistTrigger, FALLING);
   pinMode(LED_BUILTIN, OUTPUT);
-  tempDegrees = minTemp;
   timeSecs = 0.0;
   alarmSecs = 0.0;
 }
@@ -53,7 +49,6 @@ void loop() {
   if (timeSecs < timeLimitSecs) {
     digitalWrite(LED_BUILTIN, LOW);
     timeSecs++;
-    tempDegrees = (maxTemp-minTemp)*(timeSecs/timeLimitSecs) + minTemp;
     settingDAC1 = (timeSecs/timeLimitSecs)*rangeDAC1;
     analogWrite(DAC1, settingDAC1); 
     
