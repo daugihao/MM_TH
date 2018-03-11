@@ -5,8 +5,10 @@ const float pi = 3.14159;
 
 float timestep = 1.0; // milliseconds
 
-float rangeDAC = 4095.0;
-int settingDAC = 0;
+float rangeDAC0 = 4095.0;
+int settingDAC0 = 0;
+float rangeDAC1 = 3000.0;
+int settingDAC1 = 0;
 
 float alarmSecs = 0.0;
 float alarmLimitSecs = 10.0;
@@ -39,6 +41,7 @@ void setup() {
   pinMode(53, INPUT_PULLUP);
   attachInterrupt(52, heistReset, FALLING);
   attachInterrupt(53, heistTrigger, FALLING);
+  pinMode(LED_BUILTIN, OUTPUT);
   tempDegrees = minTemp;
   timeSecs = 0.0;
   alarmSecs = 0.0;
@@ -48,24 +51,35 @@ void setup() {
 void loop() {
 
   if (timeSecs < timeLimitSecs) {
+    digitalWrite(LED_BUILTIN, LOW);
     timeSecs++;
     tempDegrees = (maxTemp-minTemp)*(timeSecs/timeLimitSecs) + minTemp;
+    settingDAC1 = (timeSecs/timeLimitSecs)*rangeDAC1;
+    analogWrite(DAC1, settingDAC1); 
+    
     delay(1000);
 
-    Serial.print(tempDegrees,2);
+    Serial.print(settingDAC1);
     Serial.print("\n\r");
   }
   else if ((timeSecs >= timeLimitSecs) & (alarmSecs < alarmLimitSecs)) {
+    digitalWrite(LED_BUILTIN, HIGH);
     alarmSecs += timestep/1000.0;
     inputFreqSine += (2*pi*frequencyFreqSine*timestep/1000.0);
     outputFreqSine = (0.5*(sin(inputFreqSine)+1.0))*(maxFreqSine-minFreqSine) + minFreqSine;
     
     inputTimeSine += (2*pi*outputFreqSine*timestep/1000.0);
     outputTimeSine = 0.5*(sin(inputTimeSine)+1.0);
-    settingDAC = outputTimeSine*rangeDAC;
+    settingDAC0 = outputTimeSine*rangeDAC0;
     delay(timestep);
-    
-    analogWrite(DAC0, settingDAC); 
+
+    analogWrite(DAC0, settingDAC0);
+    settingDAC1 = rangeDAC0;
+    analogWrite(DAC1, settingDAC1); 
+  }
+  else {
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(1000);
   }
 
 }
