@@ -6,7 +6,7 @@ const float pi = 3.14159;
 float timestep = 1.0; // milliseconds
 
 float rangeDAC = 4095.0;
-int settingDAC =0;
+int settingDAC = 0;
 
 float alarmSecs = 0.0;
 float alarmLimitSecs = 10.0;
