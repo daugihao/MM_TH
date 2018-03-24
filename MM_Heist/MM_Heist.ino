@@ -21,7 +21,7 @@ float minFreqSine = 25.0;
 float maxFreqSine = 500.0;
 
 float timeSecs = 0.0;
-float timeLimitSecs = 30.0;
+float timeLimitSecs = 60.0;
 
 bool buttonState = 0;
 
@@ -38,6 +38,14 @@ void setup() {
   pinMode(53, INPUT_PULLUP);
   attachInterrupt(52, heistReset, FALLING);
   attachInterrupt(53, heistTrigger, FALLING);
+  pinMode(24, INPUT_PULLUP);
+  pinMode(25, INPUT_PULLUP);
+  pinMode(26, INPUT_PULLUP);
+  pinMode(27, INPUT_PULLUP);
+  attachInterrupt(24, heistTrigger, FALLING);
+  attachInterrupt(25, heistTrigger, FALLING);
+  attachInterrupt(26, heistTrigger, FALLING);
+  attachInterrupt(27, heistTrigger, FALLING);
   pinMode(LED_BUILTIN, OUTPUT);
   timeSecs = 0.0;
   alarmSecs = 0.0;
